@@ -33,7 +33,7 @@ requires = ["uv_build>=0.9.10,<0.12.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
-module-name = "contextprogress"
+module-name = "context_progress"
 
 [tool.pyright]
 include = ["src", "tests", "examples"]

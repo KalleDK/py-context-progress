@@ -1,7 +1,7 @@
 import pathlib
 import tomllib
 
-from contextprogress import __version__
+from context_progress import __version__
 
 
 def test_version_project():
