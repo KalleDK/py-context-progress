@@ -1,0 +1,9 @@
+_commit: v1.3.14
+_src_path: https://github.com/KalleDK/copier-python.git
+email: git@k-moeller.dk
+full_name: Kalle M. Aagaard
+module_slug: contextprogress
+project_description: Putting task progress in contextvars
+project_name: Context Progress
+python_version: '3.13'
+use_defaults: true

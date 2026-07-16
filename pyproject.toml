@@ -1,0 +1,45 @@
+[project]
+name = "context-progress"
+version = "0.1.0"
+description = "Putting task progress in contextvars"
+readme = "README.md"
+requires-python = ">=3.13"
+authors = [
+    {name = "Kalle M. Aagaard", email = "git@k-moeller.dk"},
+]
+maintainers = [
+    {name = "Kalle M. Aagaard", email = "git@k-moeller.dk"},
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+]
+
+[project.urls]
+Homepage = "https://github.com/KalleDK/py-context-progress"
+Documentation = "https://github.com/KalleDK/py-context-progress"
+Repository = "https://github.com/KalleDK/py-context-progress.git"
+
+[dependency-groups]
+test = [
+    "pytest>=9.0.2",
+]
+stubs = []
+
+[build-system]
+requires = ["uv_build>=0.9.10,<0.11.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "contextprogress"
+
+[tool.pyright]
+include = ["src", "tests", "examples"]
+typeCheckingMode = "strict"
+pythonVersion = "3.13"
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
