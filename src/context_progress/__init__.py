@@ -12,7 +12,7 @@ import enum
 from collections.abc import Generator
 from typing import Literal, Protocol
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 
 class NotSet(enum.Enum):
