@@ -2,6 +2,7 @@ import asyncio
 import logging
 import random
 
+from rich.console import Console
 from rich.logging import RichHandler
 from rich.progress import BarColumn, TaskProgressColumn, TextColumn, TimeElapsedColumn
 
@@ -32,12 +33,13 @@ async def scrape(index: int) -> None:
 
 
 async def main() -> None:
-
+    console = Console()
     with RichProgress.session(
         TextColumn("[progress.description]{task.description}"),
         BarColumn(),
         TaskProgressColumn(),
         TimeElapsedColumn(),
+        console=console,
     ):
         async with asyncio.TaskGroup() as tg:
             tg.create_task(download_file("master", total=5))
@@ -46,5 +48,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG, format="%(message)s", datefmt="[%X]", handlers=[RichHandler()])
+    logging.basicConfig(level=logging.INFO, format="%(message)s", datefmt="[%X]", handlers=[RichHandler()])
     asyncio.run(main())
