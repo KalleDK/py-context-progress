@@ -3,12 +3,12 @@ import pytest
 pytest.importorskip("rich")
 
 from context_progress import add, remove, subtask, update
-from context_progress.richprogress import RichProgress, SProgress, to_rich_description
+from context_progress.richprogress import RichProgress, SProgress, indented, to_rich_description
 
 
 def test_to_rich_description_depth_and_suffix() -> None:
-    assert to_rich_description("download", None, depth=0) == "download"
-    assert to_rich_description("download", "metadata", depth=1) == "  download: metadata"
+    assert indented(to_rich_description("download", None), 0) == "download"
+    assert indented(to_rich_description("download", "metadata"), 1) == "  download: metadata"
 
 
 def test_subtask_inserts_child_after_parent() -> None:

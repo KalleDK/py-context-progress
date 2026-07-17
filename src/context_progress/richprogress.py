@@ -20,10 +20,16 @@ from context_progress import NOT_SET, NOT_SET_T, TaskP, add, remove
 logger = logging.getLogger(__name__)
 
 
-def to_rich_description(name: str, description: str | None, depth: int) -> str:
+def indented(desc: str, depth: int) -> str:
+    """Return a description string with indentation for nested tasks."""
+
+    return "  " * depth + desc
+
+
+def to_rich_description(name: str, description: str | None) -> str:
     """Build an indented rich task description for nested rendering."""
 
-    return "  " * depth + (name if description is None else f"{name}: {description}")
+    return name if description is None else f"{name}: {description}"
 
 
 class SProgress(Progress):
@@ -127,13 +133,17 @@ class RichTask(TaskP):
     task_id: TaskID
     name: str
     depth: int
+    console: Console | None
 
     def subtask(self, name: str, description: str | None = None, total: int | None = None) -> "TaskP":
         """Create a nested child task rendered below this task."""
 
         depth = self.depth + 1
-        task_id = self.progress.insert_task(self.task_id, to_rich_description(name, description, depth), total=total)
-        return RichTask(self.progress, task_id, name, depth)
+        _desc = to_rich_description(name, description)
+        if self.console is not None:
+            self.console.print(_desc)
+        task_id = self.progress.insert_task(self.task_id, indented(_desc, depth), total=total)
+        return RichTask(self.progress, task_id, name, depth, console=self.console)
 
     def remove(self) -> None:
         """Remove this task from the rich progress display."""
@@ -150,8 +160,11 @@ class RichTask(TaskP):
 
         argv: UpdateDict = {}
         if description is not NOT_SET:
-            description = "  " * self.depth + (self.name if description is None else f"{self.name}: {description}")
-            argv["description"] = description
+            _desc = to_rich_description(self.name, description)
+            if self.console is not None:
+                self.console.print(_desc)
+            argv["description"] = indented(_desc, self.depth)
+
         if total is not NOT_SET:
             argv["total"] = total
         if advance is not NOT_SET:
@@ -166,6 +179,7 @@ class RichProgress(TaskP):
     """Root progress backend that can be registered in context_progress."""
 
     progress: SProgress
+    console: Console | None = None
 
     @classmethod
     @contextlib.contextmanager
@@ -198,7 +212,7 @@ class RichProgress(TaskP):
             disable=disable,
             expand=expand,
         ) as p:
-            rp = RichProgress(p)
+            rp = RichProgress(p, console=console)
             add(rp)
             try:
                 yield rp
@@ -207,9 +221,12 @@ class RichProgress(TaskP):
 
     def subtask(self, name: str, description: str | None = None, total: int | None = None) -> "TaskP":
         """Create a top-level rich task."""
+        _desc = to_rich_description(name, description)
+        if self.console is not None:
+            self.console.print(_desc)
 
-        task_id = self.progress.add_task(to_rich_description(name, description, depth=0), total=total)
-        return RichTask(self.progress, task_id, name, depth=0)
+        task_id = self.progress.add_task(indented(_desc, 0), total=total)
+        return RichTask(self.progress, task_id, name, depth=0, console=self.console)
 
     def remove(self) -> None:
         """No-op for root task compatibility with the TaskP protocol."""
