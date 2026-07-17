@@ -22,6 +22,11 @@ Homepage = "https://github.com/KalleDK/py-context-progress"
 Documentation = "https://github.com/KalleDK/py-context-progress"
 Repository = "https://github.com/KalleDK/py-context-progress.git"
 
+[project.optional-dependencies]
+rich = [
+    "rich>=15.0.0",
+]
+
 [dependency-groups]
 test = [
     "pytest>=9.0.2",
