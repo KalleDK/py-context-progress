@@ -1,6 +1,6 @@
 [project]
 name = "context-progress"
-version = "0.1.4"
+version = "0.1.5"
 description = "Putting task progress in contextvars"
 readme = "README.md"
 requires-python = ">=3.13"
